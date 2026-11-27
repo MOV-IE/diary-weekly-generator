@@ -232,7 +232,7 @@ function redMap() {
   return m;
 }
 
-// 링 부분 표시 (화면에서만, 인쇄되지 않아요): 먼슬리와 같은 모양
+// 링 부분 표시 (화면에서만, 인쇄되지 않아요): 먼슬리와 같은 모양. 띠는 불투명이라 아래 칸 선이 비치지 않아요.
 const RING_HOLES = [-63.5, -44.5, -25.5, 25.5, 44.5, 63.5];
 function ringSvg(len, band, edgeFirst, horizontal, pos) {
   const vi = edgeFirst ? band : 0, s = edgeFirst ? -1 : 1, vc = band / 2;
@@ -248,7 +248,7 @@ function ringSvg(len, band, edgeFirst, horizontal, pos) {
   const r = Math.min(5, band * .45) / 2;
   const holes = RING_HOLES.map(d => { const [x, y] = pt(len / 2 + d, vc); return `<circle cx="${x}" cy="${y}" r="${r}"/>`; }).join('');
   return `<svg class="ringsvg" viewBox="0 0 ${W} ${H}" style="width:${W}mm;height:${H}mm;${pos}">`
-    + `<rect width="${W}" height="${H}" fill="#cbc4bc" fill-opacity=".55"/>`
+    + `<rect width="${W}" height="${H}" fill="#e2dfda"/>`
     + `<path d="${ln(vi + s * .1)}${ln(vc)}" stroke="#aca39a" stroke-width=".18" stroke-dasharray="1.2 .9" fill="none"/>`
     + `<g fill="#aca39a">${dots}</g>`
     + `<g fill="none" stroke="#aca39a" stroke-width=".2">${holes}</g></svg>`;
