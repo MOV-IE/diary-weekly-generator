@@ -127,6 +127,8 @@ textarea{width:100%;height:64px;border:1px solid #ccc;border-radius:6px;padding:
     <div class="row"><label>아래 여백</label><input type="number" data-k="mBot" step=".5"></div>
     <div class="row"><label>안쪽 여백 (링 쪽)</label><input type="number" data-k="mIn" step=".5"></div>
     <div class="row"><label>바깥 여백</label><input type="number" data-k="mOut" step=".5"></div>
+    <div class="row"><label>링 쪽도 바깥 여백만큼 띄우기</label><input type="checkbox" data-k="ringGap"></div>
+    <p class="hint">켜면 칸 선이 링 쪽 여백에서 바깥 여백만큼 더 떨어져 끝나서, 양쪽 끝 여백이 같아 보여요.</p>
     <div class="row"><label>머리줄 높이</label><input type="number" data-k="hdH" step=".5" min="0"></div>
   </fieldset>
 
@@ -163,7 +165,7 @@ const DEFAULTS = {
   lineColor:'#1a1a1a', lineW:.15, ink:'#2b2b2b', red:'#c8463a', yearColor:'#888888', satColor:false, sat:'#3a62a8',
   holidays:true, holName:true, extraRed:'',
   showRing:true, sheet:'orig', orient:'auto', safe:5, duplex:'single', backX:0, backY:0,
-  w:86, h:171, mTop:4, mBot:7, mIn:10, mOut:3, hdH:8, zoom:1.6
+  w:86, h:171, mTop:4, mBot:7, mIn:10, mOut:3, ringGap:true, hdH:8, zoom:1.6
 };
 const KEY = 'weekly-insert-editor-v1';
 let st = {...DEFAULTS};
@@ -194,11 +196,12 @@ const dayName = dow => st.dayCase === 'upper' ? DAYS[dow] : DAYS[dow].toLowerCas
 
 function css() {
   const up = st.dayCase === 'upper';
+  const inner = +st.mIn + (st.ringGap ? +st.mOut : 0); // 링 쪽 칸 끝: 링 여백 + (켜면) 바깥 여백만큼 더
   document.getElementById('dyn').textContent = `.page{width:${st.w}mm;height:${st.h}mm;font-family:${fontStack()};color:${st.ink}}
 .hd{top:${st.mTop}mm;height:${st.hdH}mm}
 .L .hd{left:${+st.mOut + 1}mm} .R .hd{right:${+st.mOut + 1}mm}
 .cells{top:${+st.mTop + +st.hdH}mm;bottom:${st.mBot}mm}
-.L .cells{left:${st.mOut}mm;right:${st.mIn}mm} .R .cells{left:${st.mIn}mm;right:${st.mOut}mm}
+.L .cells{left:${st.mOut}mm;right:${inner}mm} .R .cells{left:${inner}mm;right:${st.mOut}mm}
 .lab{position:absolute;left:1mm;top:1.8mm}
 .hd .m{font-size:${st.fsMonth}pt;font-weight:500;font-style:${st.monthItalic?'italic':'normal'}}
 .hd .ab{font-size:${st.fsMonth*.47}pt;font-weight:600;margin-left:${st.fsMonth*.08}mm;font-style:${st.monthItalic?'italic':'normal'}}
